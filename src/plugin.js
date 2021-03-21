@@ -23,9 +23,10 @@ const skipModule = (module, { replace, extension }) =>
   !module.startsWith('.') ||
   isNodeModule(module) ||
   (
-    replace
-      ? extname(module) === `.${extension}`
-      : extname(module).length
+    //replace
+      //? 
+      extname(module) === `.${extension}`
+      //: false //extname(module).length
   )
 
 const makeDeclaration =
@@ -42,10 +43,11 @@ const makeDeclaration =
       const dirPath = resolve(dirname(filename), module)
 
       const hasModuleExt = extname(module).length
-      const newModuleName = hasModuleExt ? module.slice(0, -extname(module).length) : module
+      const newModuleName = module // hasModuleExt ? module.slice(0, -extname(module).length) : module
 
       const pathLiteral = () => {
-        if (existsSync(dirPath) && lstatSync(dirPath).isDirectory()) {
+
+        if (!existsSync(`${dirPath}.${extension}`) && existsSync(dirPath) && lstatSync(dirPath).isDirectory()) {
           return `${module}${newModuleName.endsWith('/') ? '' : '/'}index.${extension}`
         }
 
